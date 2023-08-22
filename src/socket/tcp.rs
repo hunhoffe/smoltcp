@@ -1074,10 +1074,7 @@ impl<'a> TcpSocket<'a> {
     ///
     /// This function otherwise behaves identically to [recv_slice](#method.recv_slice).
     pub fn peek_slice(&mut self, data: &mut [u8]) -> Result<usize> {
-        let buffer = self.peek(data.len())?;
-        let data = &mut data[..buffer.len()];
-        data.copy_from_slice(buffer);
-        Ok(buffer.len())
+        Ok(self.rx_buffer.read_allocated(0, data))
     }
 
     /// Return the amount of octets queued in the transmit buffer.
